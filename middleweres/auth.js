@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const auth = (req, res, next) => {
     try {
-
+        console.log("why am i at auth middlewere???")
         // Step 1: Check for token in cokkie or headers or body
         const token = req.headers["authorization"].split(" ")[1]
         if (!token) {
