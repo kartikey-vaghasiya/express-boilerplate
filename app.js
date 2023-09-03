@@ -4,6 +4,7 @@ const fileupload = require("express-fileupload")
 require('dotenv').config();
 
 const connectDB = require("./config/database")
+const connectCloudinary = require("./config/cloudinary")
 
 const AuthRouter = require("./routes/auth");
 const FileRouter = require("./routes/file")
@@ -17,19 +18,19 @@ const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(fileupload())
-
-
+app.use(fileupload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
+}))
 
 app.use("/api/v1/auth", AuthRouter)
 app.use("/api/v1/home", AuthMiddlewere, Home);
 app.use("/api/v1/file", FileRouter)
 
-
 async function runServer() {
     try {
         await connectDB(process.env.MONGO_URL)
-        // await connectCloudinary();
+        await connectCloudinary();
     } catch( error ) {
         console.log(error)
     }
