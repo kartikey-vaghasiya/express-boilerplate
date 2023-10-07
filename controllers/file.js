@@ -1,10 +1,13 @@
 const File = require("../models/File");
 const cloudinary = require('cloudinary').v2
 
+
+// Function: to upload file on local device
 const localFileUpload = (req, res) => {
 
+    // getting file from request
     const file = req.files.file;
-    let path = __dirname + "/files/" + Date.now() + `.${file.name.split(".")[1]}`
+    let path = __dirname + "../files/" + Date.now() + `.${file.name.split(".")[1]}`
 
 
     file.mv(path, (error) => {
@@ -24,18 +27,23 @@ const localFileUpload = (req, res) => {
     })
 }
 
+
+// Function: to upload file to cloudinary's server
 async function uploadToCloudinary(file, folder, quality) {
+
+    // Options: specifing "Quality, Foldername and resource type"
     const options = { folder }
     if (quality) {
         options.quality = quality
     }
     options.resource_type = "auto"
 
-    console.log(options)
 
    return cloudinary.uploader.upload(file.tempFilePath, options)
 }
 
+
+// Validations + Uploading in Clodinary using Function "uploadToCloudinary"
 const cloudinaryUpload = async (req, res) => {
     // getting file from req
     const file = req.files.imageFile
